@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GT Modpack Reference</title>
+<style>
+:root {
+--bg-dark: #0f1115;
+--card-bg: #161920;
+--text-main: #e2e8f0;
+--text-muted: #94a3b8;
+--border-color: #2d3139;
+--accent: #3b82f6;
+}
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--bg-dark);
+color: var(--text-main);
+padding-bottom: 40px;
+line-height: 1.5;
+}
+
+header {
+background-color: #1e293b;
+padding: 15px;
+text-align: center;
+border-bottom: 2px solid var(--border-color);
+}
+
+header h1 {
+font-size: 1.2rem;
+letter-spacing: 1px;
+color: #f8fafc;
+}
+
+header p {
+font-size: 0.8rem;
+color: var(--text-muted);
+margin-top: 4px;
+}
+
+/* Sticky Navigation Bar for Mobile */
+nav {
+position: sticky;
+top: 0;
+z-index: 100;
+background-color: rgba(22, 25, 32, 0.95);
+border-bottom: 1px solid var(--border-color);
+padding: 10px;
+display: flex;
+gap: 8px;
+overflow-x: auto;
+white-space: nowrap;
+-webkit-overflow-scrolling: touch;
+}
+
+nav::-webkit-scrollbar {
+display: none; /* Hide scrollbar for clean UI */
+}
+
+nav a {
+display: inline-block;
+padding: 6px 12px;
+background-color: #242936;
+color: var(--text-main);
+text-decoration: none;
+border-radius: 20px;
+font-size: 0.85rem;
+font-weight: 600;
+border: 1px solid transparent;
+}
+
+nav a:active {
+background-color: var(--accent);
+}
+
+/* Container & Cards */
+.container {
+padding: 15px;
+}
+
+.planet-section {
+background-color: var(--card-bg);
+border-radius: 12px;
+padding: 15px;
+margin-bottom: 25px;
+border: 1px solid var(--border-color);
+scroll-margin-top: 70px; /* Offset for sticky nav */
+}
+
+.planet-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 2px solid var(--border-color);
+padding-bottom: 10px;
+margin-bottom: 15px;
+}
+
+.planet-title {
+font-size: 1.3rem;
+font-weight: 700;
+text-transform: uppercase;
+}
+
+/* Expandable Accordion Sections */
+details {
+background-color: #1e2330;
+border-radius: 8px;
+margin-bottom: 10px;
+border: 1px solid #2d3548;
+overflow: hidden;
+}
+
+summary {
+padding: 12px;
+font-weight: 600;
+font-size: 0.9rem;
+cursor: pointer;
+outline: none;
+user-select: none;
+background-color: #242b3c;
+color: #f1f5f9;
+}
+
+details[open] summary {
+border-bottom: 1px solid #2d3548;
+}
+
+.details-content {
+padding: 12px;
+font-size: 0.85rem;
+}
+
+/* Property Grid Layout */
+.prop-row {
+display: flex;
+flex-direction: column;
+padding: 6px 0;
+border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.prop-label {
+font-weight: 600;
+color: var(--text-muted);
+font-size: 0.75rem;
+text-transform: uppercase;
+margin-bottom: 2px;
+}
+
+.prop-val {
+color: var(--text-main);
+word-break: break-word;
+}
+
+/* Blocks List Specific Styling */
+.block-card {
+background-color: #161920;
+border-left: 3px solid var(--accent);
+padding: 10px;
+margin-bottom: 10px;
+border-radius: 4px;
+}
+
+.block-id {
+font-family: monospace;
+color: #f43f5e;
+font-weight: bold;
+font-size: 0.8rem;
+margin-bottom: 4px;
+}
+
+/* Custom Color Themes per Planet Group */
+.theme-moon { --accent: #94a3b8; border-top: 4px solid #94a3b8; }
+.theme-mars { --accent: #ef4444; border-top: 4px solid #ef4444; }
+.theme-io { --accent: #eab308; border-top: 4px solid #eab308; }
+.theme-europa { --accent: #38bdf8; border-top: 4px solid #38bdf8; }
+.theme-titan { --accent: #f97316; border-top: 4px solid #f97316; }
+.theme-enceladus { --accent: #cbd5e1; border-top: 4px solid #cbd5e1; }
+.theme-triton { --accent: #2563eb; border-top: 4px solid #2563eb; }
+.theme-ariel { --accent: #2dd4bf; border-top: 4px solid #2dd4bf; }
+.theme-charon { --accent: #991b1b; border-top: 4px solid #991b1b; }
+.theme-miranda { --accent: #a8a29e; border-top: 4px solid #a8a29e; }
+.theme-proteus { --accent: #1e1b4b; border-top: 4px solid #4f46e5; }
+.theme-eris { --accent: #ffffff; border-top: 4px solid #ffffff; }
+.theme-dysnomia { --accent: #78350f; border-top: 4px solid #78350f; }
+
+</style>
+</head>
+<body>
+
+<header>
+<h1>GT MODPACK REFERENCE</h1>
+<p>Forge 1.20.1 — Ad Astra Space Config</p>
+</header>
+
+<nav>
+<a href="#moon">LUNA</a>
+<a href="#mars">MARS</a>
+<a href="#io">IO</a>
+<a href="#europa">EUROPA</a>
+<a href="#titan">TITAN</a>
+<a href="#enceladus">ENCELADUS</a>
+<a href="#triton">TRITON</a>
+<a href="#ariel">ARIEL</a>
+<a href="#charon">CHARON</a>
+<a href="#miranda">MIRANDA</a>
+<a href="#proteus">PROTEUS</a>
+<a href="#eris">ERIS</a>
+<a href="#dysnomia">DYSNOMIA</a>
+</nav>
+
+<div class="container">
+
+<section id="moon" class="planet-section theme-moon">
+<div class="planet-header">
+<h2 class="planet-title">01 — Moon (Luna)</h2>
+</div>
+
+<details open>
+<summary>Terrain Generation</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Flat-ish noise, low amplitude</div></div>
+<div class="prop-row"><div class="prop-label">Height Range</div><div class="prop-val">Y=0 to Y=40 (Shallow, flat)</div></div>
+<div class="prop-row"><div class="prop-label">Base Height</div><div class="prop-val">Y=8</div></div>
+<div class="prop-row"><div class="prop-label">Craters</div><div class="prop-val">YES (5-40 wide, 2-10 deep). Density: ~1 per 80×80 chunks</div></div>
+<div class="prop-row"><div class="prop-label">Caves & Fluids</div><div class="prop-val">Disabled / None</div></div>
+</div>
+</details>
+
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:lunar_regolith</div>
+<p>Fine gray powder, sparkly. Falls like sand but effectively gravityless. Drops dust.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:lunar_rock</div>
+<p>Medium gray, angular. Pickaxe required.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:helium3_pocket</div>
+<p>Identical to lunar rock with a faint blue shimmer. Detected via Cryostat hatch only. Emits particles every 5s.</p>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Skybox & Atmosphere</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Sky & Fog Color</div><div class="prop-val">#000000 (Pure Black Vacuum)</div></div>
+<div class="prop-row"><div class="prop-label">Stars</div><div class="prop-val">3x Overworld density, always visible. Slow 27-day rotation.</div></div>
+<div class="prop-row"><div class="prop-label">Earth View</div><div class="prop-val">Large sphere (2° size). Fixed position in northern quadrant. Shows phases.</div></div>
+</div>
+</details>
+</section>
+
+<section id="mars" class="planet-section theme-mars">
+<div class="planet-header">
+<h2 class="planet-title">02 — Mars</h2>
+</div>
+
+<details open>
+<summary>Terrain Generation</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Medium amplitude noise, varied plain systems, rounded outcrops</div></div>
+<div class="prop-row"><div class="prop-label">Height Range</div><div class="prop-val">Y=0 to Y=120 (Base Y=20)</div></div>
+<div class="prop-row"><div class="prop-label">Canyons</div><div class="prop-val">Valles Marineris style (15-40 wide, 20-60 deep, long linear lines)</div></div>
+<div class="prop-row"><div class="prop-label">Polar Caps</div><div class="prop-val">Flat, lighter surface at extreme Z coordinates</div></div>
+</div>
+</details>
+
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:martian_regolith</div>
+<p>Iron-red powder, fine grain, orange tint. Falls like sand.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:martian_rock</div>
+<p>Dark red-brown stone, iron oxide stained.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:martian_co2_frost</div>
+<p>White-grey crust over red regolith. Generates only in polar biomes. Drops dry ice.</p>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Skybox & Dust Storms</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Day Sky</div><div class="prop-val">#c1440e (Rust orange-red)</div></div>
+<div class="prop-row"><div class="prop-label">Sunset</div><div class="prop-val">Blue tint shift (#6699bb) due to reverse Rayleigh scattering</div></div>
+<div class="prop-row"><div class="prop-label">Dust Storm Event</div><div class="prop-val">Fog increases 5x, sky dims 40%, colors shift to dark brown-orange (#8b3a0f). Lasts 5-15 mins.</div></div>
+<div class="prop-row"><div class="prop-label">Moons</div><div class="prop-val">Phobos (Irregular, moves fast West to East); Deimos (Tiny star-like point)</div></div>
+</div>
+</details>
+</section>
+
+<section id="io" class="planet-section theme-io">
+<div class="planet-header">
+<h2 class="planet-title">03 — Io</h2>
+</div>
+
+<details open>
+<summary>Terrain & Volcanism</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Volcanic noise, medium horizontal, high vertical texture</div></div>
+<div class="prop-row"><div class="prop-label">Lava Lakes</div><div class="prop-val">Flat depressions 20-100 blocks wide filled with high-animation custom lava fluid</div></div>
+<div class="prop-row"><div class="prop-label">Calderas</div><div class="prop-val">Massive circular basins (40-120 blocks wide) feeding downhill silicate flows</div></div>
+</div>
+</details>
+
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:io_sulfur</div>
+<p>Bright yellow-orange luminous powder. Emits light level 2.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:sulfur_spire</div>
+<p>1x1 base decorative crystal structure, 2-5 blocks tall. Rings when broken.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:io_vent</div>
+<p>Unmineable terrain feature. Continuously shoots SO₂ gas particles. Full screen flash during eruptions.</p>
+</div>
+</div>
+</details>
+
+<details>
+<summary>Skybox (Jupiter Dominance)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Sky Color</div><div class="prop-val">#1a0a00 (Near black with dark burnt orange SO₂ haze)</div></div>
+<div class="prop-row"><div class="prop-label">Jupiter</div><div class="prop-val">Massive, fills 30% of the sky (~20° apparent). Highly detailed color bands and Great Red Spot. Provides night illumination.</div></div>
+</div>
+</details>
+</section>
+
+<section id="europa" class="planet-section theme-europa">
+<div class="planet-header">
+<h2 class="planet-title">04 — Europa</h2>
+</div>
+<details open>
+<summary>Terrain & Crust Network</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Extremely flat ice plain (90% at Y=5)</div></div>
+<div class="prop-row"><div class="prop-label">Lineae (Cracks)</div><div class="prop-val">Long, 1-3 block wide carved fissures filled with reddish refrozen brine crust</div></div>
+<div class="prop-row"><div class="prop-label">Sub-Ice Ocean</div><div class="prop-val">Crust is 5-8 blocks thick, beneath sits non-swimmable, viscous, damaging brine fluid</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:europa_ice</div>
+<p>Bright white-blue translucent ice. Causes slipping.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:brine_crack</div>
+<p>Technical floor block tag required for Pressure Bloom mechanics. Glows faintly.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Jupiter</div><div class="prop-val">Fills ~24° of sky height. Constant pale orange glow</div></div>
+<div class="prop-row"><div class="prop-label">Albedo Effect</div><div class="prop-val">Ice surface brightens environment naturally (Minimum ambient light set to 3)</div></div>
+</div>
+</details>
+</section>
+
+<section id="titan" class="planet-section theme-titan">
+<div class="planet-header">
+<h2 class="planet-title">05 — Titan</h2>
+</div>
+<details open>
+<summary>Dense Atmosphere & Terrain</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Tholin dune fields, rolling plains, water-ice mountains</div></div>
+<div class="prop-row"><div class="prop-label">Methane Seas</div><div class="prop-val">50-300 block wide dark orange-black fluid bodies with connected river channels</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:liquid_methane</div>
+<p>Viscous semi-opaque orange-brown fluid. Causes extreme freezing damage without appropriate thermal player suits.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:tholin_buildup</div>
+<p>Visual residue block placed over time onto multiblock machines by the Drowning Spire. Cleaned with a Wrench.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (Orange Soup)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Atmosphere Haze</div><div class="prop-val">#e6b800 (Uniform dense golden-yellow haze). Heaviest fog in pack. Max visibility 80 blocks.</div></div>
+<div class="prop-row"><div class="prop-label">Visibility</div><div class="prop-val">Sun disc, stars, and Saturn are completely hidden (only faint light patches or thin ring streaks bleed through at night).</div></div>
+</div>
+</details>
+</section>
+
+<section id="enceladus" class="planet-section theme-enceladus">
+<div class="planet-header">
+<h2 class="planet-title">06 — Enceladus</h2>
+</div>
+<details open>
+<summary>Tiger Stripes & Geysers</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Flat ice plains (95% at Y=4)</div></div>
+<div class="prop-row"><div class="prop-label">Tiger Stripes</div><div class="prop-val">4-6 linear parallel chasms filled with geothermal active blocks</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:tiger_stripe</div>
+<p>Fractured core block. Fires a massive white particle column plume every 90 seconds (shoots 20-40 blocks high). Required base position for Geyser Cradle legs.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (Saturn Glory)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Saturn View</div><div class="prop-val">Fills 30% of sky (~30° size). Golden sphere, flat equatorial ring disc with clear Cassini Division gaps. Renders edge-on.</div></div>
+<div class="prop-row"><div class="prop-label">Surface Albedo</div><div class="prop-val">Brightest surface in pack. Minimum ambient light level forced to 4.</div></div>
+</div>
+</details>
+</section>
+
+<section id="triton" class="planet-section theme-triton">
+<div class="planet-header">
+<h2 class="planet-title">07 — Triton</h2>
+</div>
+<details open>
+<summary>Nitrogen Plains</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Pale pinkish-white flat nitrogen ice plains</div></div>
+<div class="prop-row"><div class="prop-label">Dark Streaks</div><div class="prop-val">Long organic windblown soot deposits generated downwind from geysers. Harvestable for carbon dust.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:nitrogen_geyser</div>
+<p>Low pressure cryo-vent. Periodically emits soft, wind-drifting nitrogen wisps.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:cantaloupe_ice</div>
+<p>Unique dimpled rind pattern structural ice biome variant.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (Retrograde Motion)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Neptune View</div><div class="prop-val">Vivid azure blue sphere (15° size). Rises in the WEST and sets in the EAST due to retrograde planetary orbit rule.</div></div>
+<div class="prop-row"><div class="prop-label">Ambient Depth</div><div class="prop-val">Darkest baseline sky in pack. Sun is reduced to a bright pinpoint star. Sky displays dense Milky Way star textures.</div></div>
+</div>
+</details>
+</section>
+
+<section id="ariel" class="planet-section theme-ariel">
+<div class="planet-header">
+<h2 class="planet-title">08 — Ariel</h2>
+</div>
+<details open>
+<summary>Chasm Gorges</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Extremely deep canyon fault networks cutting through rolling lavender-tinted ice plains</div></div>
+<div class="prop-row"><div class="prop-label">Canyon Floors</div><div class="prop-val">Depressions down to Y=-60. Accumulates thick CO₂ frost fields and rare subsurface methane clathrates.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:methane_clathrate</div>
+<p> Ore block containing trapped crystalline bubbles. Tagged as clathrate_ore; needed for Canyon Teeth logic.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:ariel_canyon_wall</div>
+<p>Layered ice-rock strata blocks. Built-in verona_rupes tag validation check.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Uranus View</div><div class="prop-val">Serene featureless pale cyan-green sphere (18° size). Rendered with pole-on spin orientation (98° axial tilt). Thin dark rings.</div></div>
+<div class="prop-row"><div class="prop-label">Lighting</div><div class="prop-val">Canyon deep zones clamp lighting values (Y<0 applies light reduction penalty of 2).</div></div>
+</div>
+</details>
+</section>
+
+<section id="charon" class="planet-section theme-charon">
+<div class="planet-header">
+<h2 class="planet-title">09 — Charon</h2>
+</div>
+<details open>
+<summary>Polar Tholin Cap</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Muted space-weathered dark grey plains contrasted by a giant red south pole biome</div></div>
+<div class="prop-row"><div class="prop-label">Tholin Cap</div><div class="prop-val">Covers ~35% of the total world space. Deep red organic crust. Base home for the Red Altar.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:charon_tholin</div>
+<p>Granular red-orange block. Carries polar_tholin code tag mapping criteria.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (Mutual Tidal Lock)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Pluto View</div><div class="prop-val">Massive 25° sphere showing tan heart plains (Tombaugh Regio). Locked completely stationary. Only renders on Pluto-facing coordinates. The opposite hemisphere is total void.</div></div>
+</div>
+</details>
+</section>
+
+<section id="miranda" class="planet-section theme-miranda">
+<div class="planet-header">
+<h2 class="planet-title">10 — Miranda</h2>
+</div>
+<details open>
+<summary>Geological Chaos & Verona Rupes</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Shattered upthrust ice plates (35% chaotic terrain layouts)</div></div>
+<div class="prop-row"><div class="prop-label">Verona Rupes</div><div class="prop-val">Monolithic drop cliff. Suddenly shifts from surface Y=20 down to chasm depths of Y=-80. An 80+ block sheer drops vertical void where Verona Harrow multi is built.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:verona_wall</div>
+<p>Alternating layered cliff strata pattern block. Interacts with Verona Harrow structure checks.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:carbonaceous_chondrite</div>
+<p>Dark rock filled with metallic inclusions. Drops chunk plus rare PGM traces.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Uranus View</div><div class="prop-val">Large 24° sphere. Ring profile slightly more visible here than from Ariel. Cool blue shadow effects cast along cliffs.</div></div>
+</div>
+</details>
+</section>
+
+<section id="proteus" class="planet-section theme-proteus">
+<div class="planet-header">
+<h2 class="planet-title">11 — Proteus</h2>
+</div>
+<details open>
+<summary>Lumpy Non-Spherical World</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Ultra-irregular lumpy shape surface profile. No flat expanses. Sharp ridges and constant bumpy drops.</div></div>
+<div class="prop-row"><div class="prop-label">Equator Band</div><div class="prop-val">Z-aligned ring plane settling zone. Coated with ring dust block layers.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:proteus_dark</div>
+<p>Ultra-low albedo dark surface block tag holder. Mimics black velvet by swallowing almost all light reflections.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:ring_dust</div>
+<p>Thin powder cover layout. Required ecosystem block variable for Void Bloom execution paths.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (Dynamic Ring Plane)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Neptune View</div><div class="prop-val">Prograde fast orbit (1.12 Sol cycles). Neptune actively rises in East and sets in West at a massive 20° scale.</div></div>
+<div class="prop-row"><div class="prop-label">Ring Line</div><div class="prop-val">Renders a subtle, thin light-grey diagonal streak stretching directly across the sky field.</div></div>
+</div>
+</details>
+</section>
+
+<section id="eris" class="planet-section theme-eris">
+<div class="planet-header">
+<h2 class="planet-title">12A — Eris</h2>
+</div>
+<details open>
+<summary>Endgame Methane Snow Desert</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Flawless white landscape desert (95% flat at Y=4). Methane snow completely fills and buries all default impact crater features.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:methane_snow</div>
+<p>Brilliant high-albedo white surface layer with trace pink organic hues.</p>
+</div>
+<div class="block-card">
+<div class="block-id">modpack:noble_gas_pocket_eris</div>
+<p>Identical to multi-ice mix but displays occasional purple shimmers. Deep gen element, extremely rare.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (The Scattered Throne)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Deep Space</div><div class="prop-val">Absolute black vacuum. The Sun is rendered identically to standard background stars, differentiated only by its high point intensity.</div></div>
+<div class="prop-row"><div class="prop-label">Dysnomia Link</div><div class="prop-val">When endgame Throne structures match cross-body link states, a solid vector particle line renders between Dysnomia's position and the zenith.</div></div>
+</div>
+</details>
+</section>
+
+<section id="dysnomia" class="planet-section theme-dysnomia">
+<div class="planet-header">
+<h2 class="planet-title">12B — Dysnomia</h2>
+</div>
+<details open>
+<summary>Carbonate Satellite</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Gen Type</div><div class="prop-val">Small, irregular dark carbonaceous chunk moon tracking Eris. Constant slight elevation ridges. No craters.</div></div>
+</div>
+</details>
+<details>
+<summary>Custom Blocks</summary>
+<div class="details-content">
+<div class="block-card">
+<div class="block-id">modpack:dysnomia_carbonate</div>
+<p>Very dark brown-grey structural rock vein texture. Refined by the Scattered Throne into exotic ceramic compounds.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>Skybox (High Contrast Mirror)</summary>
+<div class="details-content">
+<div class="prop-row"><div class="prop-label">Eris Shine</div><div class="prop-val">Hangs locked in sky as a blinding 15° pure white sphere. Due to methane snow albedo tracking, it mirrors sunlight powerfully, casting strong bright white illumination over Dysnomia's dark brown surface floor.</div></div>
+</div>
+</details>
+</section>
+
+</div>
+
+<script>
+// Optional quick mobile enhance: auto close previous section when a new one opens
+const sections = document.querySelectorAll('.planet-section');
+sections.forEach(section => {
+const details = section.querySelectorAll('details');
+details.forEach(target => {
+target.addEventListener('toggle', e => {
+if (target.open) {
+details.forEach(detail => {
+if (detail !== target) detail.removeAttribute('open');
+});
+}
+});
+});
+});
+</script>
+</body>
+</html>
