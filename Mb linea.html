@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GT Processing Lines v2</title>
+<style>
+:root {
+--bg-dark: #07090c;
+--card-bg: #10141d;
+--text-main: #e2e8f0;
+--text-muted: #8a99ad;
+--border-color: #1e2433;
+--accent: #3b82f6;
+--tone-bg: #1e1e24;
+--tone-border: #3a3a45;
+--tone-text: #ffffff;
+}
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+background-color: var(--bg-dark);
+color: var(--text-main);
+padding-bottom: 40px;
+line-height: 1.5;
+}
+
+header {
+background-color: #141924;
+padding: 16px;
+text-align: center;
+border-bottom: 2px solid var(--border-color);
+}
+
+header h1 {
+font-size: 1.15rem;
+letter-spacing: 1px;
+color: #f8fafc;
+text-transform: uppercase;
+}
+
+header p {
+font-size: 0.8rem;
+color: var(--text-muted);
+margin-top: 4px;
+}
+
+/* Swipeable Quick Jump Bar for Phones */
+nav {
+position: sticky;
+top: 0;
+z-index: 100;
+background-color: rgba(16, 20, 29, 0.95);
+border-bottom: 1px solid var(--border-color);
+padding: 10px;
+display: flex;
+gap: 8px;
+overflow-x: auto;
+white-space: nowrap;
+-webkit-overflow-scrolling: touch;
+}
+
+nav::-webkit-scrollbar {
+display: none;
+}
+
+nav a {
+display: inline-block;
+padding: 6px 12px;
+background-color: #19202e;
+color: var(--text-main);
+text-decoration: none;
+border-radius: 20px;
+font-size: 0.75rem;
+font-weight: 700;
+border: 1px solid transparent;
+}
+
+nav a:active {
+background-color: var(--accent);
+}
+
+.container {
+padding: 12px;
+}
+
+/* Multiblock Factory Layout Component */
+.line-section {
+background-color: var(--card-bg);
+border-radius: 12px;
+padding: 14px;
+margin-bottom: 20px;
+border: 1px solid var(--border-color);
+scroll-margin-top: 65px;
+}
+
+.line-header {
+border-bottom: 2px solid var(--border-color);
+padding-bottom: 8px;
+margin-bottom: 12px;
+}
+
+.line-title {
+font-size: 1.15rem;
+font-weight: 700;
+text-transform: uppercase;
+}
+
+.line-subtitle {
+font-size: 0.75rem;
+color: var(--text-muted);
+font-weight: 600;
+margin-top: 2px;
+letter-spacing: 0.5px;
+}
+
+/* Tone Tag Badge Styling */
+.tone-badge {
+display: inline-block;
+margin-top: 6px;
+padding: 2px 8px;
+font-size: 0.7rem;
+font-weight: 800;
+text-transform: uppercase;
+border-radius: 4px;
+background-color: var(--tone-bg);
+border: 1px solid var(--tone-border);
+color: var(--tone-text);
+}
+
+.line-desc {
+font-size: 0.8rem;
+color: var(--text-muted);
+margin-top: 8px;
+font-style: italic;
+}
+
+/* Smooth Expanding Accordion Cards */
+details {
+background-color: #141924;
+border-radius: 6px;
+margin-bottom: 8px;
+border: 1px solid #1f2637;
+overflow: hidden;
+}
+
+summary {
+padding: 10px 12px;
+font-weight: 700;
+font-size: 0.85rem;
+cursor: pointer;
+background-color: #19202e;
+color: #f1f5f9;
+user-select: none;
+}
+
+details[open] summary {
+border-bottom: 1px solid #1f2637;
+}
+
+.details-content {
+padding: 12px;
+font-size: 0.8rem;
+}
+
+/* Component Data Grid Setup */
+.data-row {
+display: flex;
+flex-direction: column;
+padding: 8px 0;
+border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.data-row:last-child {
+border-bottom: none;
+}
+
+.data-label {
+font-weight: 700;
+color: var(--text-muted);
+font-size: 0.7rem;
+text-transform: uppercase;
+margin-bottom: 1px;
+letter-spacing: 0.3px;
+}
+
+.data-val {
+color: var(--text-main);
+}
+
+/* Material / Fluid Sub-Cards */
+.item-card {
+background-color: #0c0f16;
+border-left: 2px solid var(--accent);
+padding: 8px 10px;
+margin-bottom: 8px;
+border-radius: 4px;
+}
+
+.item-title {
+font-family: monospace;
+color: #f43f5e;
+font-weight: 700;
+font-size: 0.8rem;
+margin-bottom: 1px;
+}
+
+.item-desc {
+font-size: 0.75rem;
+color: var(--text-muted);
+}
+
+/* Machine Node Configurations */
+.machine-node {
+background-color: #0c0f16;
+border-left: 2px solid #10b981;
+padding: 8px 10px;
+margin-bottom: 6px;
+border-radius: 4px;
+}
+
+.machine-name {
+font-weight: 700;
+font-size: 0.75rem;
+color: #10b981;
+text-transform: uppercase;
+}
+
+.machine-desc {
+font-size: 0.75rem;
+color: var(--text-muted);
+}
+
+/* Adaptive Planet/Structure Custom Colors */
+.theme-crown { --accent: #94a3b8; border-top: 4px solid #94a3b8; --tone-bg: #2d3748; --tone-border: #4a5568; --tone-text: #cbd5e1; }
+.theme-spine { --accent: #ef4444; border-top: 4px solid #ef4444; --tone-bg: #741b1b; --tone-border: #991b1b; --tone-text: #fee2e2; }
+.theme-maw { --accent: #eab308; border-top: 4px solid #eab308; --tone-bg: #78350f; --tone-border: #92400e; --tone-text: #fef9c3; }
+.theme-bloom { --accent: #38bdf8; border-top: 4px solid #38bdf8; --tone-bg: #0c4a6e; --tone-border: #0369a1; --tone-text: #e0f2fe; }
+.theme-spire { --accent: #f97316; border-top: 4px solid #f97316; --tone-bg: #451a03; --tone-border: #7c2d12; --tone-text: #ffedd5; }
+.theme-cradle { --accent: #cbd5e1; border-top: 4px solid #cbd5e1; --tone-bg: #334155; --tone-border: #475569; --tone-text: #f1f5f9; }
+.theme-cage { --accent: #2563eb; border-top: 4px solid #2563eb; --tone-bg: #1e3a8a; --tone-border: #1d4ed8; --tone-text: #dbeafe; }
+.theme-teeth { --accent: #2dd4bf; border-top: 4px solid #2dd4bf; --tone-bg: #115e59; --tone-border: #0f766e; --tone-text: #ccfbf1; }
+.theme-altar { --accent: #991b1b; border-top: 4px solid #991b1b; --tone-bg: #450a0a; --tone-border: #7f1d1d; --tone-text: #fde8e8; }
+.theme-harrow { --accent: #a8a29e; border-top: 4px solid #a8a29e; --tone-bg: #44403c; --tone-border: #57534e; --tone-text: #f5f5f4; }
+.theme-vbloom { --accent: #4f46e5; border-top: 4px solid #4f46e5; --tone-bg: #312e81; --tone-border: #3730a3; --tone-text: #e0e7ff; }
+.theme-throne { --accent: #ffffff; border-top: 4px solid #ffffff; --tone-bg: #111111; --tone-border: #333333; --tone-text: #ffffff; }
+
+</style>
+</head>
+<body>
+
+<header>
+<h1>Processing Lines v2</h1>
+<p>Custom Materials & Multi-Planetary Infrastructure Matrix</p>
+</header>
+
+<nav>
+<a href="#crown">LUNA CROWN</a>
+<a href="#spine">MARS SPINE</a>
+<a href="#maw">IO MAW</a>
+<a href="#bloom">EUROPA BLOOM</a>
+<a href="#spire">TITAN SPIRE</a>
+<a href="#cradle">ENCELADUS CRADLE</a>
+<a href="#cage">TRITON CAGE</a>
+<a href="#teeth">ARIEL TEETH</a>
+<a href="#altar">CHARON ALTAR</a>
+<a href="#harrow">MIRANDA HARROW</a>
+<a href="#vbloom">PROTEUS BLOOM</a>
+<a href="#throne">SCATTERED THRONE</a>
+</nav>
+
+<div class="container">
+
+<section id="crown" class="line-section theme-crown">
+<div class="line-header">
+<h2 class="line-title">Regolith Crown</h2>
+<div class="line-subtitle">HV TIER — MOON (LUNA)</div>
+<div class="tone-badge">Tone: Gritty</div>
+</div>
+<p class="line-desc">"Everything it outputs feels earned. The Moon does not care about you."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Cryostatic He-3 Crystal</div><div class="item-desc">Pale blue-white hexagonal crystal. Essential gate item required to unlock Applied Energistics 2.</div></div>
+<div class="item-card"><div class="item-title">Regolith Slag</div><div class="item-desc">Bulk byproduct. Dense grey dust brick. Must be cleared to prevent operational locks.</div></div>
+<div class="item-card"><div class="item-title">Lunar Anorthosite Ingot</div><div class="item-desc">Dull white metal-ceramic hybrid structural frame material.</div></div>
+<div class="item-card"><div class="item-title">Void-Refined Silicon</div><div class="item-desc">Iridescent, crystal-pure substrate. Bypasses Europa-tier circuit locks early.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Vacuum Draw (512 EU/t)</div><div class="data-val">Extracts 1x He-3 Crystal (per 20 min), 64x Regolith Slag, and 100 mB Lunar Breath gas loop. Fills buffer blocks.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Thermal Vacuum Separation (384 EU/t)</div><div class="data-val">Processes mined Ilmenite Ore into 3x Titanium and 2x Iron dusts. Provides a lasting resource advantage into later tiers.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Zone Refinery (448 EU/t)</div><div class="data-val">Refines Silicon Ore into crystal substrates without oxidation. Yields 1x Void Silicon per 8 ore inputs.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Anorthosite Press (320 EU/t)</div><div class="data-val">Compresses highland feldspars into 2x Lunar Anorthosite Ingots.</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Thermal Centrifuge</div><div class="machine-desc">Clears bulk Slag output arrays into Rare Earths, Silicon Dioxide, and recovered Iron.</div></div>
+<div class="machine-node"><div class="machine-name">Precision Cutter & Assembler</div><div class="machine-desc">Slices Void Silicon boules to automate on-site HV Circuit Board production pipelines.</div></div>
+</div>
+</details>
+</section>
+
+<section id="spine" class="line-section theme-spine">
+<div class="line-header">
+<h2 class="line-title">Dust Spine</h2>
+<div class="line-subtitle">EV TIER — MARS</div>
+<div class="tone-badge">Tone: Gritty / Brutal</div>
+</div>
+<p class="line-desc">"Mars destroys things slowly. The half-buried multiblock architecture endures through active attrition."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Spinal Resin</div><div class="item-desc">Dark amber-red fluid compound. High-temperature EV tier bonding agent. Smells like ozone.</div></div>
+<div class="item-card"><div class="item-title">Martian Ichor</div><div class="item-desc">Mobile, highly pressurized liquid cryogenic CO₂ fluid medium. Avoid containment breaches.</div></div>
+<div class="item-card"><div class="item-title">Perchlorite Bloom</div><div class="item-desc">Pale green-white crystal intermediate cluster. Primary vector for local Magnesium arrays.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: The Breath Cycle (640 EU/t)</div><div class="data-val">Inhales atmospheric CO₂ + Hydrogen loop to yield 500 mB Methane fluid, 100 mB Spinal Resin, and bulk dust. Outputs triple (3x) during Storm events.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Perchlorate Crack (512 EU/t)</div><div class="data-val">Cracks plain-mined ores into 2x Perchlorite Blooms, 200 mB Martian Ichor, and 150 mB Chlorine gas (bank for UV tier).</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Cold Fractioning (320-160 EU/t)</div><div class="data-val">Uses cold night conditions to halve energy draws. Extracts Ichor, Argon, and trace Nitrogen gases.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Resin Cure (448 EU/t)</div><div class="data-val">Recycles local Resin byproduct with rock ore to form 4x Ferromartian Composites (EV casings).</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Chemical Reactor & Electrolyser</div><div class="machine-desc">Reforms spent catalyst beds to prevent factory shutdowns. Electrolyzes product water to lock down the internal Hydrogen fuel loop.</div></div>
+</div>
+</details>
+</section>
+
+<section id="maw" class="line-section theme-maw">
+<div class="line-header">
+<h2 class="line-title">The Maw</h2>
+<div class="line-subtitle">IV TIER — IO (JUPITER)</div>
+<div class="tone-badge">Tone: Dangerous</div>
+</div>
+<p class="line-desc">"Everything downstream of the Maw is downstream of a volcano. Eruption metrics are scheduled features."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Sulfuric Condensate</div><div class="item-desc">Acrid, bright yellow high-pressure gas fluid. The foundational base feedstock for all IV acid chains.</div></div>
+<div class="item-card"><div class="item-title">Ionian Rare Earth Flux</div><div class="item-desc">Grey-brown luminous slurry. The primary mass-source of heavy rare earth oxides prior to late-game lines.</div></div>
+<div class="item-card"><div class="item-title">Pyrite Melt</div><div class="item-desc">Molten iron disulfide compound. Solidifies instantly if temperatures drop below 600°C.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Volcanic Draw (1024 EU/t)</div><div class="data-val">Drinks lake lava to extract 800 mB Sulfuric Condensate and 200 mB Volcanic Ichor. Eruption triggers boost outputs by 3x for 30s. Heat is free.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Contact Burn (512 EU/t)</div><div class="data-val">Oxidizes condensate inside the furnace shaft to output 700 mB Ionian Sulfuric Acid (H₂SO₄) at scaled mass capacity.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Silicate Leach (768 EU/t)</div><div class="data-val">Leaches Eruptive Slag byproduct inside acid tanks to extract Rare Earth Flux and Pyrite fluid components.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Volcanic Casting (640 EU/t)</div><div class="data-val">Fuses Ichor and Pyrite into 4x Ionian Pyrite Ingots before solidification drop windows expire.</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Chemical Bath & Centrifuge</div><div class="machine-desc">Feeds local acid lines into raw ore-doubling baths, while spinning REE Slurries down into pure elements (Ce, Nd, La, Y).</div></div>
+</div>
+</details>
+</section>
+
+<section id="bloom" class="line-section theme-bloom">
+<div class="line-header">
+<h2 class="line-title">Pressure Bloom</h2>
+<div class="line-subtitle">LuV TIER — EUROPA (JUPITER)</div>
+<div class="tone-badge">Tone: Alien</div>
+</div>
+<p class="line-desc">"Crystals precipitate in directions that defy normal geometric expectations at 600+ bar."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Abyssal Brine</div><div class="item-desc">Luminescent blue-grey sub-ice fluid resource. Rich in concentrated ancient mineral extractions.</div></div>
+<div class="item-card"><div class="item-title">Pressurised Silicon Lattice</div><div class="item-desc">Blue-tinted 3D crystalline substrate frame. Generates extreme surface output metrics if sliced cleanly.</div></div>
+<div class="item-card"><div class="item-title">Deep Magnalium</div><div class="item-desc">High-density structural casing alloy carrying pressure histories locked into its atomic structures.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Deep Crystallisation (2048 EU/t)</div><div class="data-val">Reacts Brine with Silica under pressure. Drops 2x Silicon Lattices, bulk Vent Slurry, and rare non-cubic Anomaly Crystals. Clamps to zero output if pressure limits break.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Brine Electrolysis (1536 EU/t)</div><div class="data-val">Splits brine to supply bulk Bloom Chloride (Cl₂), Caustic solutions (NaOH), and excess Hydrogen power loops.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Pressure Scan (256 EU/t)</div><div class="data-val">Low-draw exploration array. Map ice cracks to trigger rare hidden ore generation events across the biome.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Slurry Refinery (1024 EU/t)</div><div class="data-val">Refines byproduct slurries directly inside secondary arms into 4x Deep Magnalium casing materials.</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Chemical Reactor Pipeline</div><p>Channels bulk Chloride inputs with Titan-sourced Acetylene gases to establish scaling local PVC plastic production lines.</p></div>
+</div>
+</details>
+</section>
+
+<section id="spire" class="line-section theme-spire">
+<div class="line-header">
+<h2 class="line-title">Drowning Spire</h2>
+<div class="line-subtitle">ZPM TIER — TITAN (SATURN)</div>
+<div class="tone-badge">Tone: Lore</div>
+</div>
+<p class="line-desc">"Titan waited billions of years. The patient pre-biological chemical soup is accelerated here."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Sea-Cracked Ethylene</div><div class="item-desc">Isotope-shifted fluid carrying a distinct orange hue. Resists extreme cryogenic structural fracturing.</div></div>
+<div class="item-card"><div class="item-title">Titanian Polyethylene</div><div class="item-desc">The primary ZPM plastic layer. Toughened infrastructure compound used for advanced wire jackets.</div></div>
+<div class="item-card"><div class="item-title">Tholin Extract</div><div class="item-desc">Thick organic liquid cracked down from complex surface chemistry. Serves as a vital preview for Charon lines.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Sea Draw (3072 EU/t)</div><div class="data-val">Cracks methane seas at 800°C into 4 simultaneous product output lines. Advances the sticky tholin residue lock counter.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Haber Column (2048 EU/t)</div><div class="data-val">Fuses atmospheric Nitrogen gas with cracked Hydrogen loops to build high-volume Ammonia-Nitrogen compounds.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Tholin Deep Crack (1536 EU/t)</div><div class="data-val">Extracts prebiotic fluids, purified Tholin Blocs (Charon cargo), and Carbon-Nitrogen ZPM insulation resins.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Polymerisation Column (1024 EU/t)</div><div class="data-val">Uses high surface atmospheric pressures to compress ethylene into 8x Titanian Polyethylene blocks per cycle.</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Extruder & Compressor</div><p>Shapes resin components directly into specialized ZPM Cable Insulation tubes, and compresses pregel into local mining explosive packs.</p></div>
+</div>
+</details>
+</section>
+
+<section id="cradle" class="line-section theme-cradle">
+<div class="line-header">
+<h2 class="line-title">Geyser Cradle</h2>
+<div class="line-subtitle">UV TIER — ENCELADUS (SATURN)</div>
+<div class="tone-badge">Tone: Alien</div>
+</div>
+<p class="line-desc">"The cryovolcanic plume fires every 90 seconds. The nano-scale lattice space spacing is cleanly distinct."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Plume-Caught Nano-SiO₂</div><div class="item-desc">Milky white nanoparticle fluid layer (5-20nm). Unmatched structural purity scale.</div></div>
+<div class="item-card"><div class="item-title">Enceladite</div><div class="item-desc">Nano-crystalline silicon structure containing zero Earth analogues. Foundational UV circuit board substrate core.</div></div>
+<div class="item-card"><div class="item-title">Void Chlorine</div><div class="item-desc">99.99% pure gas resource electrolyzed in complete vacuum. Unlocks high-performance structural sheathing.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Plume Capture (4096 EU/t)</div><div class="data-val">Captures geyser eruption bursts. Yields periodic, high-volume inputs of Nano-SiO₂ slurry, brine, and frost crystals.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Enceladite CVD (3072 EU/t)</div><div class="data-val">Reduces slurry compounds using hydrogen CVD methods at 1000°C to grow 1x clean Enceladite substrate unit per 4 inputs.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Void Electrolysis (2048 EU/t)</div><div class="data-val">Runs chloralkali separations in vacuum to output high-purity Void Chlorine, Caustic fluids, and recycled loop Hydrogen.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Frost Synthesis (2048 EU/t)</div><div class="data-val">Fuses rare Frost Crystals with Enceladite to produce exotic Frozen Circuit Substrates and Cryo-Glass optics.</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Buffer Fluid Tanks (Critical Control)</div><p>Crucial mobile layout step. Players must buffer intermittent plume burst drops into steady tank streams or downstream systems starve.</p></div>
+</div>
+</details>
+</section>
+
+<section id="cage" class="line-section theme-cage">
+<div class="line-header">
+<h2 class="line-title">Frost Rib Cage</h2>
+<div class="line-subtitle">UHV TIER — TRITON (NEPTUNE)</div>
+<div class="tone-badge">Tone: Alien / Strange</div>
+</div>
+<p class="line-desc">"Triton orbits backwards. The quietest horror occurs at -235°C to maximize nanotube chirality."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Cryonanotube Bundle</div><div class="item-desc">Brittle metallic-sheen carbon configurations. The sole structural conductor source for all UHV wire progression.</div></div>
+<div class="item-card"><div class="item-title">Triton Cryogen</div><div class="item-desc">The coldest liquid fluid asset in the pack. Foundational cooling medium required for all UHV superconductor logistics.</div></div>
+<div class="item-card"><div class="item-title">Retrograde Wax</div><div class="item-desc">Long-chain hydrocarbons generated via high cryogenic selectivity chemical pathways. Distills to premium lubricants.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Arc Discharge (8192 EU/t)</div><div class="data-val">Fires electrical arcs through liquid nitrogen to deposit 2x CNT Bundles. Biome bonus zeroes out cooling draws inside plains. Wears electrodes.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Cryogenic Distillery (1024 EU/t)</div><div class="data-val">Sublimates nitrogen ice blocks into bulk Triton Cryogen fluid and trace Carbon Monoxide elements. Run first to bootstrap lines.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Retrograde Synthesis (2048 EU/t)</div><div class="data-val">Fischer-Tropsch line outputting 300 mB Retrograde Wax and 100 mB specialized UHV cable sheathing insulation layers.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Frost Extraction (1536 EU/t)</div><div class="data-val">Extracts surface soot streaks into 4x Activated Carbon Slabs (saves up bulk feedstock for Proteus lines).</div></div>
+</div>
+</details>
+
+<details>
+<summary>On-Site Factory Chain</summary>
+<div class="details-content">
+<div class="machine-node"><div class="machine-name">Alloy Smelter (Backwards Dependency)</div><p>Requires Osmium and Iridium cargo flown back from the later Miranda UMV base to reform eroded arc discharge electrodes.</p></div>
+</div>
+</details>
+</section>
+
+<section id="teeth" class="line-section theme-teeth">
+<div class="line-header">
+<h2 class="line-title">Canyon Teeth</h2>
+<div class="line-subtitle">UEV TIER — ARIEL (URANUS)</div>
+<div class="tone-badge">Tone: Gritty / Industrial</div>
+</div>
+<p class="line-desc">"Hydraulic arms strike until the ancient clathrate gas cages release locked elements."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Ariel Xe-Kr Blend</div><div class="item-desc">Rare noble gas mixture pocket hit. The single most valuable resource asset on Ariel. Save and stockpile for OpV.</div></div>
+<div class="item-card"><div class="item-title">Xenon Crystal</div><div class="item-desc">Solid crystalline xenon gas formed below -111°C. Highly volatile circuit dopant element.</div></div>
+<div class="item-card"><div class="item-title">Deep Canyon Composite</div><div class="item-desc">High-pressure structural ceramic material used to insulate UEV machine bodies.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Thermal Shock Bite (16384 EU/t)</div><div class="data-val">Drives pressure pulses into canyon walls to drop Clathrate Melt, Gas fractions, and mandatory Stone Flour. Randomly drops Xe-Kr Blends.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Noble Gas Isolation (4096 EU/t)</div><div class="data-val">Batch fractionates noble gas blends into Pure Xenon and Pure Krypton fluids. Requires imported Triton LN₂.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Stone Flour Refinery (2048 EU/t)</div><div class="data-val">Leaches stone residues with Io-sourced acid lines to build 4x Deep Canyon Composites and Alumina dust.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Xenon Crystallisation (2048 EU/t)</div><div class="data-val">Freezes isolated Xenon assets into solid crystal blocks for high-tier circuit doping reactors.</div></div>
+</div>
+</details>
+</section>
+
+<section id="altar" class="line-section theme-altar">
+<div class="line-header">
+<h2 class="line-title">Red Altar</h2>
+<div class="line-subtitle">UIV TIER — CHARON (PLUTO)</div>
+<div class="tone-badge">Tone: Lore</div>
+</div>
+<p class="line-desc">"Burning through 4 billion years of surface nitrogen and methane organics. Forbidden archaeology."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Charon Graphene</div><div class="item-desc">Single-layer, defect-free graphene sheet substrate. Foundations of all UIV circuit board manufacturing.</div></div>
+<div class="item-card"><div class="item-title">Polar Benzene</div><div class="item-desc">Isotope-rich dark aromatic chemical fluid. Polymerizes into thick Polystyrene plastics.</div></div>
+<div class="item-card"><div class="item-title">Charon Ash</div><div class="item-desc">Organic remainder pulled from the innermost 2200K burning ring. Required for extreme late-game synthesis.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Four-Stage Pyrolysis (32768 EU/t)</div><div class="data-val">Heats Tholins progressively through 300K->2200K zones. Outputs Red Pyrolysate gas, Nitrile Resins, Ash, and bulk Tholin Char byproducts.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Graphene Deposition (16384 EU/t)</div><div class="data-val">Vaporizes precursor fluids onto imported Copper Foil sheets, utilizing polar environmental cold as a crystalline heat sink.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Red Pyrolysate Cracking (8192 EU/t)</div><div class="data-val">Cracks complex gas mixes into Polar Benzene, Acetonitrile cleaning solvents, Base Fuel gas, and sealed trace HCN units.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Char Activation (4096 EU/t)</div><div class="data-val">Clears internal Char waste loops using local KOH reagents to manufacture industrial-scale volumes of Activated Carbon Slabs.</div></div>
+</div>
+</details>
+</section>
+
+<section id="harrow" class="line-section theme-harrow">
+<div class="line-header">
+<h2 class="line-title">Verona Harrow</h2>
+<div class="line-subtitle">UMV TIER — MIRANDA (URANUS)</div>
+<div class="tone-badge">Tone: Brutal</div>
+</div>
+<p class="line-desc">"Hanging over a ten-kilometre sheer drops abyss chasm to strip-mine shattered planetary seams."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Abyss Slurry</div><div class="item-desc">Dense, dark, heavily unrefined PGM fluid pumped directly from deep chasm drill chains.</div></div>
+<div class="item-card"><div class="item-title">Osmiridium Alloy</div><div class="item-desc">The hardest material in the pack at UMV ranges. Forges machine contact components and resolves Triton electrode wear loops completely.</div></div>
+<div class="item-card"><div class="item-title">Void-Shocked Quartz</div><div class="item-desc">Naturally impact-melted glass shards. Pure optics lenses incapable of creation inside standard blast furnaces.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Deep Grind (65536 EU/t)</div><div class="data-val">9 vertical chains descend into the chasm. Passive mining depth yields unrefined Slurries and Quartz glass. Local seismic shocks can jam lines.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Slurry Separation (16384 EU/t)</div><div class="data-val">Hydrometallurgical acid wash splitting slurry into pure Ruthenium, Iridium, and deep-tier Osmium. Requires continuous Io-sourced H₂SO₄ imports.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Breccia Processing (8192 EU/t)</div><div class="data-val">Processes mandatory rubble into Silicate Dust, Water Ice components, and rich exotic Chondrite Extracts.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Osmiridium Forge (8192 EU/t)</div><div class="data-val">Fuses pure Osmium and Iridium dust streams under high heat to forge 4x Osmiridium Alloy units.</div></div>
+</div>
+</details>
+</section>
+
+<section id="vbloom" class="line-section theme-vbloom">
+<div class="line-header">
+<h2 class="line-title">Void Bloom</h2>
+<div class="line-subtitle">UXV TIER — PROTEUS (NEPTUNE)</div>
+<div class="tone-badge">Tone: Alien</div>
+</div>
+<p class="line-desc">"Proteus absorbs 90% of all incoming light. The factory opens toward Neptune to catch the only available shadow."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Void-Activated Carbon</div><div class="item-desc">Fine jet-black powder with a surface area over 3000 m²/g. Foundational UXV supercapacitor electrode medium.</div></div>
+<div class="item-card"><div class="item-title">Void Capacitor Cell</div><div class="item-desc">The critical UXV energy storage gate component. Assembled exclusively inside dry vacuum cores.</div></div>
+<div class="item-card"><div class="item-title">Neptune Trace</div><div class="item-desc">Atmospheric isotope signatures pulled from sieved ring plane dust layers. Advanced content placeholder.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Operation Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Mode 1: Plasma Draw (131072 EU/t)</div><div class="data-val">Feeds dark surface ores to plasma torches to deposit 600 mB Carbon Slurry. Redstone signals toggle Turbo: 3x output at 5x EU draw.</div></div>
+<div class="data-row"><div class="data-label">Mode 2: Ring Sieve (32768 EU/t)</div><div class="data-val">Sieves ring equator dust into Ring Concentrate (sinter into Protean Ceramic insulation), Ice fragments, and Trace Metals.</div></div>
+<div class="data-row"><div class="data-label">Mode 3: Void Assembly (65536 EU/t)</div><div class="data-val">Layer-by-layer supercapacitor cell assembly. Blends local carbon and ceramics with imported UIV ionic liquid electrolytes.</div></div>
+<div class="data-row"><div class="data-label">Mode 4: Dark Synthesis (32768 EU/t)</div><div class="data-val">Processes residue items into rare Void Fullerenes, Dark Polymer fluid insulation, and diamond cutting tips.</div></div>
+</div>
+</details>
+</section>
+
+<section id="throne" class="line-section theme-throne">
+<div class="line-header">
+<h2 class="line-title">Scattered Throne</h2>
+<div class="line-subtitle">OpV TIER — ERIS & DYSNOMIA (ENDGAME)</div>
+<div class="tone-badge">Tone: All Three Combined</div>
+</div>
+<p class="line-desc">"Two structures on two worlds linked across dimensions. The cross-body lattice ignites the end of the solar system."</p>
+
+<details open>
+<summary>Exclusive Materials</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Scattered Plasma</div><div class="item-desc">Sustained high-energy ion plasma column glowing blue-white. The ultimate energy medium consumed by all OpV systems.</div></div>
+<div class="item-card"><div class="item-title">Dysnomia Lattice Ceramic</div><div class="item-desc">Carbonate sintered via plasma bombardment. Crystal lattices align to form highly heat-resistant casings.</div></div>
+<div class="item-card"><div class="item-title">Void Fullerene Complex</div><div class="item-desc">Xe@C60 Xenon Endofullerene molecules. Encapsulates single noble gas atoms inside carbon cages for endgame circuits.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Cross-Body Operational Modes</summary>
+<div class="details-content">
+<div class="data-row"><div class="data-label">Eris Crown — Mode 1: Plasma Ignition (524288 EU/t)</div><div class="data-val">Ionizes imported Ariel Xenon/Krypton stockpiles inside confinement rings. Requires active Dysnomia link to ignite the column. Generates 1000 mB Scattered Plasma.</div></div>
+<div class="data-row"><div class="data-label">Eris Crown — Mode 2: Cryo Shock (65536 EU/t)</div><div class="data-val">Flashes surface methane snow with plasma heat into Eris Cryogenic Shock Fluid. Leverages free process heat from Mode 1.</div></div>
+<div class="data-row"><div class="data-label">Dysnomia Spire — Mode 1: Lattice Sintering (131072 EU/t)</div><div class="data-val">Bombards raw carbonate chunks with cross-dimensionally piped Scattered Plasma to forge local Lattice Ceramic casings.</div></div>
+<div class="data-row"><div class="data-label">Dysnomia Spire — Mode 2: Perfect Anneal (65536 EU/t)</div><div class="data-val">Runs a second plasma annealing pass to perfect alignment arrays, dropping ultimate-tier Perfect Lattice Ceramics.</div></div>
+<div class="data-row"><div class="data-label">Dysnomia Spire — Mode 3: Endofullerene Synthesis (32768 EU/t)</div><div class="data-val">Decomposes dark organics under plasma heat to output Void Fullerene Complex clusters, Diamond Dust, and Exotic Polymer fluids.</div></div>
+</div>
+</details>
+
+<details>
+<summary>Endgame Cross-Tier Payoffs Matrix</summary>
+<div class="details-content">
+<div class="item-card"><div class="item-title">Mars ──► Enceladus (IV ──► UV)</div><div class="item-desc">Early banked Martian Chlorine gas fuels final high-scale Void-Grade PVC wire sheathing lines.</div></div>
+<div class="item-card"><div class="item-title">Titan ──► Charon (ZPM ──► UIV)</div><div class="item-desc">Purified Tholin Blocs accumulated on Titan serve as primary fuel feedstocks for the Red Altar's pyrolysis rings.</div></div>
+<div class="item-card"><div class="item-title">Triton ──► Ariel (UHV ──► UEV)</div><div class="item-desc">Triton Liquid Nitrogen exports provide the critical cryogenic medium needed to isolate Ariel noble gas blend pockets.</div></div>
+<div class="item-card"><div class="item-title">Ariel ──► Eris (UEV ──► OpV)</div><div class="item-desc">Long-game Xenon/Krypton noble gas stockpiles feed directly into the Scattered Throne to ignite the final plasma energy tier.</div></div>
+</div>
+</details>
+</section>
+
+</div>
+
+<script>
+// Automatic accordion mobile logic: collapses alternative details tabs when a new one clicks open
+const sections = document.querySelectorAll('.line-section');
+sections.forEach(section => {
+const details = section.querySelectorAll('details');
+details.forEach(target => {
+target.addEventListener('toggle', e => {
+if (target.open) {
+details.forEach(detail => {
+if (detail !== target) detail.removeAttribute('open');
+});
+}
+});
+});
+});
+</script>
+</body>
+</html>
